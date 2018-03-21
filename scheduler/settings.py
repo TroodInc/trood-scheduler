@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3@a)-cbt514^!a%qiotx$su4%29p@dxfrd-qb(oouzbp^@!+gr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -79,8 +79,12 @@ WSGI_APPLICATION = 'scheduler.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '{}_scheduler'.format(os.environ.get('COMPOSE_PROJECT_NAME')),
+        'USER': os.environ.get('POSTGRES_USERNAME'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': 'postgres.{}'.format(os.environ.get('COMPOSE_PROJECT_NAME')),
+        'PORT': '',
     }
 }
 
@@ -124,3 +128,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
+
+# Celery configuration
+# http://docs.celeryproject.org/en/latest/userguide/configuration.html
+
+CELERY_BROKER_URL = os.environ.get('RABBITMQ_URL')
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_TASK_SERIALIZER = 'json'

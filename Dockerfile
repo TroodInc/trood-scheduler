@@ -4,9 +4,11 @@ ENV APPDIR=/home/scheduler
 ENV PYTHONPATH=$PYTHONPATH:$APPDIR
 
 RUN mkdir -p $APPDIR
+
 RUN apk update && \
-    apk add gcc g++ make libffi-dev openssl-dev && \
+    apk add postgresql-dev gcc python3-dev musl-dev && \
     mkdir -p $APPDIR
+
 WORKDIR $APPDIR
 
 COPY ./requirements.txt $APPDIR/requirements.txt
