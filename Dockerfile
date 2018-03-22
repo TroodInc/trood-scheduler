@@ -6,7 +6,7 @@ ENV PYTHONPATH=$PYTHONPATH:$APPDIR
 RUN mkdir -p $APPDIR
 
 RUN apk update && \
-    apk add postgresql-dev gcc python3-dev musl-dev && \
+    apk add postgresql-dev gcc g++ linux-headers python3-dev musl-dev && \
     mkdir -p $APPDIR
 
 WORKDIR $APPDIR
@@ -19,4 +19,4 @@ ADD . $APPDIR/
 
 EXPOSE 8000
 
-CMD ["/usr/local/bin/gunicorn", "-b", "0.0.0.0:8000", "scheduler.wsgi:application"]
+CMD /usr/local/bin/circusd /home/scheduler/circus.ini

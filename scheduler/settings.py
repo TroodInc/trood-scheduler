@@ -25,7 +25,7 @@ SECRET_KEY = '3@a)-cbt514^!a%qiotx$su4%29p@dxfrd-qb(oouzbp^@!+gr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -132,7 +132,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 # Celery configuration
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html
 
-CELERY_BROKER_URL = os.environ.get('RABBITMQ_URL')
+BROKER_URL = os.environ.get('RABBITMQ_URL')
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_RESULT_BACKEND = 'django-db'
