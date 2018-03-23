@@ -1,3 +1,10 @@
 __pycache__
 
 .env
+
+celerybeat.pid
+celerybeat-schedule
+
+.fromgit
+
+django

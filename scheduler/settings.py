@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/1.11/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
-
+import glob
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -132,8 +132,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 # Celery configuration
 # http://docs.celeryproject.org/en/latest/userguide/configuration.html
 
-BROKER_URL = os.environ.get('RABBITMQ_URL')
+CELERY_BROKER_URL = os.environ.get('RABBITMQ_URL')
 
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_IMPORTS = [module[:-3].replace("/", ".") for module in glob.glob('tasks/*.py')]
