@@ -6,5 +6,8 @@ celerybeat.pid
 celerybeat-schedule
 
 .fromgit
+.coverage
+
+htmlcov
 
 django
