@@ -24,8 +24,8 @@ from scheduler.api.views import TasksViewset, ResultsViewset
 
 router = DefaultRouter()
 
-router.register(r'tasks', TasksViewset)
-router.register(r'results', ResultsViewset)
+router.register(r'tasks', TasksViewset, base_name='tasks')
+router.register(r'results', ResultsViewset, base_name='results')
 
 urlpatterns = [
     url(r'^api/v1.0/', include(router.urls, namespace='api')),
