@@ -81,10 +81,10 @@ WSGI_APPLICATION = 'scheduler.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '{}_scheduler'.format(os.environ.get('COMPOSE_PROJECT_NAME')),
-        'USER': os.environ.get('POSTGRES_USERNAME'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-        'HOST': 'postgres.{}'.format(os.environ.get('COMPOSE_PROJECT_NAME')),
+        'NAME': 'scheduler',
+        'USER': 'scheduler',
+        'PASSWORD': 'scheduler',
+        'HOST': 'postgres.scheduler.{}'.format(os.environ.get('COMPOSE_PROJECT_NAME')),
         'PORT': '',
     }
 }

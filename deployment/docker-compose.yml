@@ -1,0 +1,30 @@
+version: "2"
+
+services:
+  scheduler:
+    build:
+      context: ../
+      dockerfile: deployment/Dockerfile
+    container_name: scheduler
+    ports:
+      - "8000"
+    networks:
+      - ${COMPOSE_PROJECT_NAME}-network
+
+  scheduler_postgres:
+    image: postgres:9.5
+    container_name: postgres.scheduler
+    environment:
+      CONTAINER_NAME: postgres.scheduler
+    volumes:
+      - ./postgres/${CONTAINER_NAME}/data:/var/lib/postgresql/data
+      - ./postgres/${CONTAINER_NAME}/conf:/etc/postgresql
+      - ./postgres/${CONTAINER_NAME}/logs:/var/log/postgresql
+    environment:
+      LC_ALL: C.UTF-8
+      POSTGRES_DB: scheduler
+      POSTGRES_USER: scheduler
+      POSTGRES_PASSWORD: scheduler
+
+    networks:
+      - ${COMPOSE_PROJECT_NAME}-network
