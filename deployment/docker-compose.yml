@@ -9,7 +9,7 @@ services:
     ports:
       - "8000"
     networks:
-      - ${COMPOSE_PROJECT_NAME}-network
+      - test-network
 
   scheduler_postgres:
     image: postgres:9.5
@@ -27,4 +27,8 @@ services:
       POSTGRES_PASSWORD: scheduler
 
     networks:
-      - ${COMPOSE_PROJECT_NAME}-network
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
