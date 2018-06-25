@@ -6,7 +6,7 @@ ENV PYTHONPATH=$PYTHONPATH:$APPDIR
 RUN mkdir -p $APPDIR
 
 RUN apk update && \
-    apk add postgresql-dev gcc g++ linux-headers python3-dev musl-dev && \
+    apk add postgresql-dev gcc g++ linux-headers python3-dev musl-dev git && \
     mkdir -p $APPDIR
 
 WORKDIR $APPDIR
