@@ -1,3 +1,4 @@
+import json
 from rest_framework import serializers
 
 from django_celery_beat.models import PeriodicTask, IntervalSchedule, CrontabSchedule
@@ -15,14 +16,30 @@ def is_number(s):
 
 class TaskSerializer(serializers.ModelSerializer):
     schedule = serializers.CharField()
+    args = serializers.ListField(required=False, default=[])
+    kwargs = serializers.DictField(required=False, default={})
 
     class Meta:
         model = PeriodicTask
         fields = (
-            'name', 'task', 'args', 'kwargs', 'enabled', 'last_run_at',
+            'id', 'name', 'task', 'args', 'kwargs', 'enabled', 'last_run_at',
             'total_run_count', 'description', 'schedule'
         )
         write_only_fields = ('schedule', )
+
+    def to_internal_value(self, data):
+        data = super(TaskSerializer, self).to_internal_value(data)
+
+        data['args'] = json.dumps(data.get('args', []))
+        data['kwargs'] = json.dumps(data.get('kwargs', {}))
+
+        return data
+
+    def to_representation(self, instance):
+        instance.args = json.loads(instance.args)
+        instance.kwargs = json.loads(instance.kwargs)
+
+        return super(TaskSerializer, self).to_representation(instance)
 
     def create(self, validated_data):
         schedule = validated_data.pop('schedule', None)
@@ -54,4 +71,4 @@ class TaskSerializer(serializers.ModelSerializer):
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskResult
-        fields = ('task_id', 'status', 'result', 'date_done', 'traceback', )
+        fields = ('id', 'task_id', 'status', 'result', 'date_done', 'traceback', 'meta')

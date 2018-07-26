@@ -84,8 +84,7 @@ DATABASES = {
         'NAME': 'scheduler',
         'USER': 'scheduler',
         'PASSWORD': 'scheduler',
-        'HOST': 'postgres.scheduler.{}'.format(os.environ.get('COMPOSE_PROJECT_NAME')),
-        'PORT': '',
+        'HOST': 'scheduler_postgres',
     }
 }
 
@@ -176,3 +175,6 @@ CELERY_RESULT_BACKEND = 'django-db'
 CELERY_TASK_SERIALIZER = 'json'
 
 CELERY_IMPORTS = [module[:-3].replace("/", ".") for module in glob.glob('tasks/*.py')]
+
+SERVICE_DOMAIN = os.environ.get("SERVICE_DOMAIN", "SCHEDULER")
+SERVICE_AUTH_SECRET = os.environ.get("SERVICE_AUTH_SECRET")

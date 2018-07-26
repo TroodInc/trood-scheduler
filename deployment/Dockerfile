@@ -1,12 +1,12 @@
-FROM python:3-alpine
+FROM python:3
 
 ENV APPDIR=/home/scheduler
 ENV PYTHONPATH=$PYTHONPATH:$APPDIR
 
 RUN mkdir -p $APPDIR
 
-RUN apk update && \
-    apk add postgresql-dev gcc g++ linux-headers python3-dev musl-dev git && \
+RUN apt-get update && \
+    apt-get install gcc g++ python3-dev musl-dev -y && \
     mkdir -p $APPDIR
 
 WORKDIR $APPDIR
@@ -17,8 +17,7 @@ COPY ./manage.py $APPDIR/manage.py
 COPY ./circus.ini $APPDIR/circus.ini
 COPY ./requirements.txt $APPDIR/requirements.txt
 
-RUN pip install -r $APPDIR/requirements.txt
-RUN rm $APPDIR/requirements.txt
+RUN pip install --upgrade -r $APPDIR/requirements.txt
 
 EXPOSE 8000
 
