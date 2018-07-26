@@ -176,5 +176,9 @@ CELERY_TASK_SERIALIZER = 'json'
 
 CELERY_IMPORTS = [module[:-3].replace("/", ".") for module in glob.glob('tasks/*.py')]
 
-SERVICE_DOMAIN = os.environ.get("SERVICE_DOMAIN", "SCHEDULER")
-SERVICE_AUTH_SECRET = os.environ.get("SERVICE_AUTH_SECRET")
+
+SERVICE_DOMAIN = os.environ.get('SERVICE_DOMAIN')
+SERVICE_AUTH_SECRET = os.environ.get('SERVICE_AUTH_SECRET')
+
+
+CUSTODIAN_URL = os.environ.get('CUSTODIAN_URL', 'http://custodian.trood:8000/custodian/')
