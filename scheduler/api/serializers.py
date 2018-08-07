@@ -36,11 +36,12 @@ class TaskSerializer(serializers.ModelSerializer):
             data['kwargs'] = json.dumps(data.get('kwargs'))
 
         if 'schedule' in data:
-            if is_number(data['schedule']):
+            schedule = data.pop('schedule')
+            if is_number(schedule):
                 interval, _ = IntervalSchedule.objects.get_or_create(every=int(schedule), period=IntervalSchedule.SECONDS)
                 data['interval'] = interval
 
-            elif isinstance(data['schedule'], str):
+            elif isinstance(schedule, str):
                 parts = data['schedule'].split(" ")
                 if len(parts) == 5:
                     crontab, _ = CrontabSchedule.objects.get_or_create(
