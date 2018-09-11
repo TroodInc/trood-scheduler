@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.6
 
 ENV APPDIR=/home/scheduler
 ENV PYTHONPATH=$PYTHONPATH:$APPDIR
