@@ -182,3 +182,5 @@ SERVICE_AUTH_SECRET = os.environ.get('SERVICE_AUTH_SECRET')
 
 
 CUSTODIAN_URL = os.environ.get('CUSTODIAN_URL', 'http://custodian.trood:8000/custodian/')
+MAIL_SERVICE_URL = os.environ.get('MAIL_SERVICE_URL', 'http://mail.trood:8000')
+SYSTEM_MAIL_ID = os.environ.get('SYSTEM_MAIL_ID', 1)
