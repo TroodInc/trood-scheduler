@@ -42,7 +42,7 @@ class TaskSerializer(serializers.ModelSerializer):
                 data['interval'] = interval
 
             elif isinstance(schedule, str):
-                parts = data['schedule'].split(" ")
+                parts = schedule.split(" ")
                 if len(parts) == 5:
                     crontab, _ = CrontabSchedule.objects.get_or_create(
                         minute=parts[0],
