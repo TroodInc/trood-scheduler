@@ -26,14 +26,13 @@ def update_task_status():
 @app.task
 def deadline_notification():
     #
-    #          3h15m    3h       2h45m           0h
-    #  time____'________L________'_______________| <- DEADLINE
-    #          {  gap to notify  }
+    #          3h               2h59m           0h
+    #  time____L________________'_______________| <- DEADLINE
+    #          {  gap to notify }
     #
     gap = datetime.now() + timedelta(hours=3)
-    threshold = timedelta(minutes=15, seconds=1)
-    start = '{0:%Y%m%dT%H%M%S}'.format(gap - threshold)
-    end = '{0:%Y%m%dT%H%M%S}'.format(gap + threshold)
+    start = '{0:%Y%m%dT%H%M%S}'.format(gap)
+    end = '{0:%Y%m%dT%H%M%S}'.format(gap + timedelta(minutes=1, seconds=1))
     task_obj = client.objects.get('task')
     notify_tasks = client.records.query(task_obj, depth=2).filter(
         status__eq='ACTIVE', deadline__gt=start, deadline__lt=end
