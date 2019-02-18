@@ -2,8 +2,9 @@ __pycache__
 .pytest_cache
 deployment/postgres/
 .DS_Store
-
+.vscode
 .env
+tmp
 
 celerybeat.pid
 celerybeat-schedule

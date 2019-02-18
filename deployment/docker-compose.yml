@@ -7,7 +7,7 @@ services:
       dockerfile: deployment/Dockerfile
     container_name: scheduler
     ports:
-      - "8000"
+      - "8000:8000"
     networks:
       - test-network
 
