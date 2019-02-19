@@ -1,5 +1,6 @@
 import glob
 import os
+
 from configurations import Configuration, values
 import dj_database_url
 

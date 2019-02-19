@@ -8,8 +8,6 @@ services:
     container_name: scheduler
     ports:
       - "8000"
-    environment:
-      DJANGO_CONFIGURATION: Development
     networks:
       - test-network
 
