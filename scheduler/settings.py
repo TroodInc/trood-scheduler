@@ -76,9 +76,13 @@ class BaseConfiguration(Configuration):
     # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
     DATABASES = {
-        'default': dj_database_url.config(
-            default='postgres://scheduler:scheduler@scheduler_postgres/scheduler'
-        )
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'scheduler',
+            'USER': 'scheduler',
+            'PASSWORD': 'scheduler',
+            'HOST': 'scheduler_postgres',
+        }
     }
 
     # Internationalization
@@ -96,7 +100,7 @@ class BaseConfiguration(Configuration):
 
     TROOD_AUTH_SERVICE_URL = values.URLValue(
         'http://authorization.trood:8000/', environ_prefix=''
-    )
+    ).setup('TROOD_AUTH_SERVICE_URL')
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -164,7 +168,7 @@ class BaseConfiguration(Configuration):
     # Celery configuration
     # http://docs.celeryproject.org/en/latest/userguide/configuration.html
 
-    CELERY_BROKER_URL = values.Value('RABBITMQ_URL', envron_prefix='')
+    CELERY_BROKER_URL = values.Value('RABBITMQ_URL', envron_prefix='').setup('CELERY_BROKER_URL')
 
     CELERY_ACCEPT_CONTENT = ['json']
     CELERY_RESULT_BACKEND = 'django-db'
@@ -173,13 +177,15 @@ class BaseConfiguration(Configuration):
     CELERY_IMPORTS = [module[:-3].replace("/", ".") for module in glob.glob('tasks/*.py')]
 
 
-    SERVICE_DOMAIN = values.Value('', environ_prefix='')
-    SERVICE_AUTH_SECRET = values.Value('', environ_prefix='')
+    SERVICE_DOMAIN = values.Value('', environ_prefix='').setup('SERVICE_DOMAIN')
+    SERVICE_AUTH_SECRET = values.Value('', environ_prefix='').setup('SERVICE_AUTH_SECRET')
 
 
-    CUSTODIAN_URL = values.URLValue('http://custodian.trood:8000/custodian/', environ_prefix='')
-    MAIL_SERVICE_URL = values.URLValue('http://mail.trood:8000', environ_prefix='')
-    SYSTEM_MAIL_ID = values.IntegerValue(1, environ_prefix='')
+    CUSTODIAN_URL = values.URLValue(
+        'http://custodian.trood:8000/custodian/', environ_prefix=''
+        ).setup('CUSTODIAN_URL')
+    MAIL_SERVICE_URL = values.URLValue('http://mail.trood:8000', environ_prefix='').setup('MAIL_SERVICE_URL')
+    SYSTEM_MAIL_ID = values.IntegerValue(1, environ_prefix='').setup('SYSTEM_MAIL_ID')
 
 class Development(BaseConfiguration):
     DEBUG = True
