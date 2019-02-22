@@ -1,7 +1,7 @@
 import glob
 import os
 
-from configurations import Configuration, values
+from configurations import Configuration
 import dj_database_url
 
 
@@ -17,9 +17,7 @@ class BaseConfiguration(Configuration):
     #DOTENV = os.path.join(BASE_DIR, '.env')
 
     # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = values.Value(
-        '3@a)-cbt514^!a%qiotx$su4%29p@dxfrd-qb(oouzbp^@!+gr', environ_prefix=''
-    )
+    SECRET_KEY = '3@a)-cbt514^!a%qiotx$su4%29p@dxfrd-qb(oouzbp^@!+gr'
 
     #FIXME: we must setup that list
     ALLOWED_HOSTS = ['*']
@@ -98,9 +96,9 @@ class BaseConfiguration(Configuration):
 
     USE_TZ = True
 
-    TROOD_AUTH_SERVICE_URL = values.URLValue(
-        'http://authorization.trood:8000/', environ_prefix=''
-    ).setup('TROOD_AUTH_SERVICE_URL')
+    TROOD_AUTH_SERVICE_URL = os.environ.get(
+        'TROOD_AUTH_SERVICE_URL', 'http://authorization.trood:8000/'
+    )
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -168,7 +166,7 @@ class BaseConfiguration(Configuration):
     # Celery configuration
     # http://docs.celeryproject.org/en/latest/userguide/configuration.html
 
-    CELERY_BROKER_URL = values.Value('RABBITMQ_URL', envron_prefix='').setup('CELERY_BROKER_URL')
+    CELERY_BROKER_URL = os.environ.get('RABBITMQ_URL')
 
     CELERY_ACCEPT_CONTENT = ['json']
     CELERY_RESULT_BACKEND = 'django-db'
@@ -177,15 +175,15 @@ class BaseConfiguration(Configuration):
     CELERY_IMPORTS = [module[:-3].replace("/", ".") for module in glob.glob('tasks/*.py')]
 
 
-    SERVICE_DOMAIN = values.Value('', environ_prefix='').setup('SERVICE_DOMAIN')
-    SERVICE_AUTH_SECRET = values.Value('', environ_prefix='').setup('SERVICE_AUTH_SECRET')
+    SERVICE_DOMAIN = os.environ.get('SERVICE_DOMAIN')
+    SERVICE_AUTH_SECRET = os.environ.get('SERVICE_AUTH_SECRET')
 
 
-    CUSTODIAN_URL = values.URLValue(
-        'http://custodian.trood:8000/custodian/', environ_prefix=''
-        ).setup('CUSTODIAN_URL')
-    MAIL_SERVICE_URL = values.URLValue('http://mail.trood:8000', environ_prefix='').setup('MAIL_SERVICE_URL')
-    SYSTEM_MAIL_ID = values.IntegerValue(1, environ_prefix='').setup('SYSTEM_MAIL_ID')
+    CUSTODIAN_URL = os.environ.get(
+        'CUSTODIAN_URL', 'http://custodian.trood:8000/custodian/'
+    )
+    MAIL_SERVICE_URL = os.environ.get('MAIL_SERVICE_URL', 'http://mail.trood:8000')
+    SYSTEM_MAIL_ID = os.environ.get('SYSTEM_MAIL_ID', 1)
 
 class Development(BaseConfiguration):
     DEBUG = True
