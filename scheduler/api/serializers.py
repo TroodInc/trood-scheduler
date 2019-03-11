@@ -4,6 +4,7 @@ from rest_framework import serializers
 from django_celery_beat.models import PeriodicTask, IntervalSchedule, CrontabSchedule
 from django_celery_results.models import TaskResult
 from rest_framework.exceptions import ValidationError
+import importlib
 
 
 def is_number(s):
@@ -12,6 +13,42 @@ def is_number(s):
         return True
     except ValueError:
         return False
+
+def set_task_schedule(data):
+    schedule = data.pop('schedule')
+    if is_number(schedule):
+                interval, _ = IntervalSchedule.objects.get_or_create(every=int(schedule), period=IntervalSchedule.SECONDS)
+                data['interval'] = interval
+
+    elif 'now' in schedule:
+        task_path = data['task']
+        args = data['args']
+        args = json.loads(args)
+        kwargs = data['kwargs']
+        kwargs = json.loads(kwargs)
+        task_module, this_task_name = task_path.split('.')
+        task_module = importlib.import_module(f'tasks.{task_module}')
+        task = getattr(task_module, this_task_name)
+        task.delay(*args, **kwargs)
+
+    elif isinstance(schedule, str):
+        parts = schedule.split(" ")
+        if len(parts) == 5:
+            crontab, _ = CrontabSchedule.objects.get_or_create(
+                minute=parts[0],
+                hour=parts[1],
+                day_of_week=parts[2],
+                day_of_month=parts[3],
+                month_of_year=parts[4]
+            )
+            data['crontab'] = crontab
+        else:
+            raise ValidationError("Wrong crontab string: {}".format(schedule))
+
+    else:
+        raise ValidationError("Wrong schedule string: {}".format(schedule))
+    return data
+
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -36,27 +73,7 @@ class TaskSerializer(serializers.ModelSerializer):
             data['kwargs'] = json.dumps(data.get('kwargs'))
 
         if 'schedule' in data:
-            schedule = data.pop('schedule')
-            if is_number(schedule):
-                interval, _ = IntervalSchedule.objects.get_or_create(every=int(schedule), period=IntervalSchedule.SECONDS)
-                data['interval'] = interval
-
-            elif isinstance(schedule, str):
-                parts = schedule.split(" ")
-                if len(parts) == 5:
-                    crontab, _ = CrontabSchedule.objects.get_or_create(
-                        minute=parts[0],
-                        hour=parts[1],
-                        day_of_week=parts[2],
-                        day_of_month=parts[3],
-                        month_of_year=parts[4]
-                    )
-                    data['crontab'] = crontab
-                else:
-                    raise ValidationError("Wrong crontab string: {}".format(schedule))
-
-            else:
-                raise ValidationError("Wrong schedule string: {}".format(schedule))
+            data = set_task_schedule(data)
 
         return data
 
