@@ -17,18 +17,25 @@ def is_number(s):
 def set_task_schedule(data):
     schedule = data.pop('schedule')
     if is_number(schedule):
-                interval, _ = IntervalSchedule.objects.get_or_create(every=int(schedule), period=IntervalSchedule.SECONDS)
-                data['interval'] = interval
+        interval, _ = IntervalSchedule.objects.get_or_create(every=int(schedule), period=IntervalSchedule.SECONDS)
+        data['interval'] = interval
 
     elif 'now' in schedule:
         task_path = data['task']
-        args = data['args']
-        args = json.loads(args)
-        kwargs = data['kwargs']
-        kwargs = json.loads(kwargs)
         task_module, this_task_name = task_path.split('.')
         task_module = importlib.import_module(f'tasks.{task_module}')
         task = getattr(task_module, this_task_name)
+
+        if 'args' in data:
+            args = json.loads(data['args'])
+        else:
+            args = list()
+        
+        if 'kwargs' in data:
+            kwargs = json.loads(data['kwargs'])
+        else:
+            kwargs = dict()
+        
         task.delay(*args, **kwargs)
 
     elif isinstance(schedule, str):
