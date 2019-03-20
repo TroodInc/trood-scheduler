@@ -1,4 +1,5 @@
 import pytest
+import json
 from django.test import Client
 from hamcrest import *
 from hamcrest.core import assert_that
@@ -68,3 +69,13 @@ class PeriodicTasksTestCase(APITestCase):
         response = self.client.post(reverse('api:tasks-list'), data=task_data)
 
         assert_that(response.status_code, equal_to(status.HTTP_201_CREATED))
+
+    @pytest.mark.django_db
+    def test_can_create_change_activity_status_task(self):
+        fixture = '/home/src/.fixtures/scheduler.json'
+        with open(fixture, 'r') as fixture_file:
+            data = json.loads('\n'.join(fixture_file.readlines()))['fields']
+        
+        response = self.client.post(reverse('api:tasks-list'), data=data)
+
+        assert_that(response.status_code, equal_to(status.HTTP_201_CREATED), response.json())

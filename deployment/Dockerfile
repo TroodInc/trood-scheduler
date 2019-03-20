@@ -17,6 +17,7 @@ COPY ./manage.py $APPDIR/manage.py
 COPY ./circus.ini $APPDIR/circus.ini
 COPY ./pytest.ini $APPDIR/pytest.ini
 COPY ./requirements.txt $APPDIR/requirements.txt
+COPY ./.fixtures $APPDIR/.fixtures
 
 RUN pip install --upgrade -r $APPDIR/requirements.txt
 

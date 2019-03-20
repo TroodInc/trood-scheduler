@@ -1,0 +1,22 @@
+ {
+    "model": "django_celery_beat.periodictask",
+    "pk": 1,
+    "fields": {
+      "name": "Overdue tasks",
+      "task": "tasks.task.change_activity_status_to_overdue",
+      "schedule": 2,
+      "crontab": null,
+      "solar": null,
+      "args": "[]",
+      "kwargs": "{}",
+      "queue": null,
+      "exchange": null,
+      "routing_key": null,
+      "expires": null,
+      "enabled": true,
+      "last_run_at": "2018-10-09T15:51:04.308Z",
+      "total_run_count": 10,
+      "date_changed": "2018-10-09T15:54:04.343Z",
+      "description": "Change status for overdue tasks"
+    }
+  }

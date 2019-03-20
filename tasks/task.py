@@ -54,3 +54,14 @@ def deadline_notification():
         )
 
     return list(notify_tasks)
+
+@app.task
+def change_activity_status_to_overdue():
+
+    task_obj = client.objects.get('activity')
+    datetime_now = '{0:%Y%m%dT%H%M%S}'.format(datetime.now())
+    overdued_tasks = client.records.query(task_obj).filter(status__eq='OPEN',
+                                                           deadline__lt=datetime_now)
+    for task in overdued_tasks:
+        task.status = 'OVERDUE'
+        task_overdue = client.records.update(task)
