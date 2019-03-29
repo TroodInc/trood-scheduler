@@ -74,13 +74,9 @@ class BaseConfiguration(Configuration):
     # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'scheduler',
-            'USER': 'scheduler',
-            'PASSWORD': 'scheduler',
-            'HOST': 'scheduler_postgres',
-        }
+        'default': dj_database_url.config(
+        default='postgres://scheduler:scheduler@scheduler_postgres/scheduler'
+        )
     }
 
     # Internationalization
@@ -150,10 +146,12 @@ class BaseConfiguration(Configuration):
         },
     }
 
-    # FIXME: must be setupable
+
     RAVEN_CONFIG = {
-        'dsn': 'http://4d8d2a23c26a4a9e8c44f9f4b9c3b3d5:6a34464e42ca41c58ff424a3c821f50f@sentry.dev.trood.ru/7',
-        'release': 'dev'
+        'dsn': os.environ.get('RAVEN_CONFIG_DSN',
+        'http://4d8d2a23c26a4a9e8c44f9f4b9c3b3d5:6a34464e42ca41c58ff424a3c821f50f@sentry.dev.trood.ru/7'
+        ),
+        'release': os.environ.get('RAVEN_CONFIG_RELEASE', 'dev')
     }
 
     # Static files (CSS, JavaScript, Images)

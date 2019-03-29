@@ -6,6 +6,9 @@ services:
       context: ../
       dockerfile: deployment/Dockerfile
     container_name: scheduler
+    environment: 
+      RAVEN_CONFIG_DSN: "http://4d8d2a23c26a4a9e8c44f9f4b9c3b3d5:6a34464e42ca41c58ff424a3c821f50f@sentry.dev.trood.ru/7"
+      RAVEN_CONFIG_RELEASE: "dev"
     ports:
       - "8000"
     networks:
