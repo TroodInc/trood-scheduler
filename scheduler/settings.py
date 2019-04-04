@@ -146,13 +146,13 @@ class BaseConfiguration(Configuration):
         },
     }
 
+    ENABLE_RAVEN = os.environ.get('ENABLE_RAVEN', "False")
 
-    RAVEN_CONFIG = {
-        'dsn': os.environ.get('RAVEN_CONFIG_DSN',
-        'http://4d8d2a23c26a4a9e8c44f9f4b9c3b3d5:6a34464e42ca41c58ff424a3c821f50f@sentry.dev.trood.ru/7'
-        ),
-        'release': os.environ.get('RAVEN_CONFIG_RELEASE', 'dev')
-    }
+    if ENABLE_RAVEN == "True":
+        RAVEN_CONFIG = {
+            'dsn': os.environ.get('RAVEN_CONFIG_DSN'),
+            'release': os.environ.get('RAVEN_CONFIG_RELEASE')
+        }
 
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.11/howto/static-files/
