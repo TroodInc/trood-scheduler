@@ -1,10 +1,15 @@
 from __future__ import absolute_import
 import os
-
+from django.conf import settings
+# set the default Django settings module for the 'celery' program.
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'scheduler.settings')
+os.environ.setdefault('DJANGO_CONFIGURATION', 'Development')
+from configurations import importer
+importer.install()
 from celery import Celery
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'scheduler.settings')
+
 
 app = Celery('scheduler')
 

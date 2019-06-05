@@ -8,6 +8,7 @@ from rest_framework.test import APITestCase, APIClient
 
 from scheduler.api.tests.factories import TaskFactory
 from trood_auth_client.authentication import TroodUser
+from scheduler.celery import app
 
 trood_user = TroodUser({
     "id": 1,
@@ -18,6 +19,7 @@ class PeriodicTasksTestCase(APITestCase):
     def setUp(self):
         self.client = APIClient()
         self.client.force_authenticate(user=trood_user)
+        app.conf.update(CELERY_ALWAYS_EAGER=True)
 
     @pytest.mark.django_db
     def test_can_retrieve_periodic_tasks_list(self):
@@ -49,6 +51,18 @@ class PeriodicTasksTestCase(APITestCase):
             'name': 'test task',
             'task': 'demo.test_agent',
             'schedule': 10
+        }
+
+        response = self.client.post(reverse('api:tasks-list'), data=task_data)
+
+        assert_that(response.status_code, equal_to(status.HTTP_201_CREATED))
+
+    @pytest.mark.django_db
+    def test_can_create_imidiate_task(self):
+        task_data = {
+            'name': 'test task',
+            'task': 'demo.test_print_ok',
+            'schedule': 'now'
         }
 
         response = self.client.post(reverse('api:tasks-list'), data=task_data)
