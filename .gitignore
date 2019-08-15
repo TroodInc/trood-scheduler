@@ -16,4 +16,4 @@ htmlcov
 django
 
 .idea/*
-.pytest_cache/*
+.pytest_cache/*docs/_build
