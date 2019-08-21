@@ -17,3 +17,4 @@ django
 
 .idea/*
 .pytest_cache/*
+docs/_build
