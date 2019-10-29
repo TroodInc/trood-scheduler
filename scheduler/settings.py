@@ -92,15 +92,7 @@ class BaseConfiguration(Configuration):
 
     USE_TZ = True
 
-    TROOD_AUTH_SERVICE_URL = os.environ.get(
-        'TROOD_AUTH_SERVICE_URL', 'http://authorization.trood:8000/'
-    )
-
-    REST_FRAMEWORK = {
-        'DEFAULT_AUTHENTICATION_CLASSES': (
-            'trood_auth_client.authentication.TroodTokenAuthentication',
-        ),
-    }
+    REST_FRAMEWORK = {}
 
     LOGGING = {
         'version': 1,
@@ -172,9 +164,26 @@ class BaseConfiguration(Configuration):
 
     CELERY_IMPORTS = [module[:-3].replace("/", ".") for module in glob.glob('tasks/*.py')]
 
+    AUTH_TYPE = os.environ.get('AUTHENTICATION_TYPE')
 
-    SERVICE_DOMAIN = os.environ.get('SERVICE_DOMAIN')
-    SERVICE_AUTH_SECRET = os.environ.get('SERVICE_AUTH_SECRET')
+    if AUTH_TYPE == 'TROOD':
+        TROOD_AUTH_SERVICE_URL = os.environ.get(
+            'TROOD_AUTH_SERVICE_URL', 'http://authorization.trood:8000/'
+        )
+        SERVICE_DOMAIN = os.environ.get("SERVICE_DOMAIN", "FILESERVICE")
+        SERVICE_AUTH_SECRET = os.environ.get("SERVICE_AUTH_SECRET")
+
+        REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = (
+           'trood_auth_client.authentication.TroodTokenAuthentication',
+        )
+
+        REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = (
+            'rest_framework.permissions.IsAuthenticated',
+        )
+
+    elif AUTH_TYPE == 'NONE':
+        REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = ()
+        REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = ()
 
 
     CUSTODIAN_URL = os.environ.get(
@@ -183,8 +192,10 @@ class BaseConfiguration(Configuration):
     MAIL_SERVICE_URL = os.environ.get('MAIL_SERVICE_URL', 'http://mail.trood:8000')
     SYSTEM_MAIL_ID = os.environ.get('SYSTEM_MAIL_ID', 1)
 
+
 class Development(BaseConfiguration):
     DEBUG = True
+
 
 class Production(BaseConfiguration):
     DEBUG = False
