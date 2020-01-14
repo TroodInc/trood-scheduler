@@ -7,7 +7,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIClient
 
 from scheduler.api.tests.factories import TaskFactory
-from trood_auth_client.authentication import TroodUser
+from trood.contrib.django.auth.authentication import TroodUser
 from scheduler.celery import app
 
 trood_user = TroodUser({
