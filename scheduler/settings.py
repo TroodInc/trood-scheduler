@@ -98,7 +98,7 @@ class BaseConfiguration(Configuration):
 
     REST_FRAMEWORK = {
         'DEFAULT_AUTHENTICATION_CLASSES': (
-            'trood_auth_client.authentication.TroodTokenAuthentication',
+            'trood.contrib.django.auth.authentication.TroodTokenAuthentication',
         ),
     }
 

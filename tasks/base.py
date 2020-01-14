@@ -2,7 +2,7 @@ import requests
 from requests import RequestException
 from celery.task import task
 
-from trood_auth_client.authentication import get_service_token
+from trood.core.utils import get_service_token
 
 
 @task()
