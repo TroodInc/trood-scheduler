@@ -5,7 +5,7 @@ from hamcrest import *
 from rest_framework.test import APITestCase, APIClient
 
 from scheduler.api.tests.factories import ResultFactory
-from trood_auth_client.authentication import TroodUser
+from trood.contrib.django.auth.authentication import TroodUser
 
 trood_user = TroodUser({
     "id": 1,
