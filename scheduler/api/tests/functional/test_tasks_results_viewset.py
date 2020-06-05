@@ -1,7 +1,7 @@
 import pytest
 from rest_framework import status
 from rest_framework.reverse import reverse
-from hamcrest import *
+
 from rest_framework.test import APITestCase, APIClient
 
 from scheduler.api.tests.factories import ResultFactory
@@ -24,6 +24,6 @@ class TaskResultTestCase(APITestCase):
         response = self.client.get(reverse('api:results-list'))
         decoded_response = response.json()
 
-        assert_that(response.status_code, equal_to(status.HTTP_200_OK))
-        assert_that(len(decoded_response), equal_to(1))
-        assert_that(decoded_response[0]['result'], equal_to(result.result))
+        assert response.status_code == status.HTTP_200_OK
+        assert len(decoded_response) == 1
+        assert decoded_response[0]['result'] == result.result
