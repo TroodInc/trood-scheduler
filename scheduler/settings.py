@@ -138,9 +138,8 @@ class BaseConfiguration(Configuration):
         },
     }
 
-    ENABLE_RAVEN = os.environ.get('ENABLE_RAVEN', "False")
-
-    if ENABLE_RAVEN == "True":
+    ENABLE_RAVEN = os.environ.get('ENABLE_RAVEN', "False") == "True"
+    if ENABLE_RAVEN:
         RAVEN_CONFIG = {
             'dsn': os.environ.get('RAVEN_CONFIG_DSN'),
             'release': os.environ.get('RAVEN_CONFIG_RELEASE')
@@ -161,6 +160,7 @@ class BaseConfiguration(Configuration):
     CELERY_ACCEPT_CONTENT = ['json']
     CELERY_RESULT_BACKEND = 'django-db'
     CELERY_TASK_SERIALIZER = 'json'
+    CELERY_ALWAYS_EAGER = os.environ.get('CELERY_ALWAYS_EAGER', 'False') == 'True' and bool(CELERY_BROKER_URL)
 
     CELERY_IMPORTS = [module[:-3].replace("/", ".") for module in glob.glob('tasks/*.py')]
 
