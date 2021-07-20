@@ -5,23 +5,27 @@ from configurations import Configuration
 import dj_database_url
 
 
+def rel(*x):
+    return os.path.normpath(os.path.join(BASE_DIR, *x))
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 class BaseConfiguration(Configuration):
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
-    #Django environ
-    #FIXME: we must have oportunity upload settings from env file
-    #DOTENV = os.path.join(BASE_DIR, '.env')
+    # Django environ
+    # FIXME: we must have oportunity upload settings from env file
+    # DOTENV = os.path.join(BASE_DIR, '.env')
 
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = '3@a)-cbt514^!a%qiotx$su4%29p@dxfrd-qb(oouzbp^@!+gr'
 
-    #FIXME: we must setup that list
+    # FIXME: we must setup that list
     ALLOWED_HOSTS = ['*']
-
 
     # Application definition
 
@@ -54,7 +58,7 @@ class BaseConfiguration(Configuration):
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [],
+            'DIRS': ['scheduler/templates'],
             'APP_DIRS': True,
             'OPTIONS': {
                 'context_processors': [
@@ -69,13 +73,12 @@ class BaseConfiguration(Configuration):
 
     WSGI_APPLICATION = 'scheduler.wsgi.application'
 
-
     # Database
     # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
     DATABASES = {
         'default': dj_database_url.config(
-        default='postgres://scheduler:scheduler@scheduler_postgres/scheduler'
+            default='postgres://scheduler:scheduler@scheduler_postgres/scheduler'
         )
     }
 
@@ -104,7 +107,7 @@ class BaseConfiguration(Configuration):
         'formatters': {
             'verbose': {
                 'format': '%(levelname)s %(asctime)s %(module)s '
-                        '%(process)d %(thread)d %(message)s'
+                          '%(process)d %(thread)d %(message)s'
             },
         },
         'handlers': {
@@ -149,8 +152,7 @@ class BaseConfiguration(Configuration):
     # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
     STATIC_URL = '/static/'
-
-    STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
+    STATIC_ROOT = os.environ.get('SCHEDULER_SERVICE_STATIC_ROOT', rel('static'))
 
     # Celery configuration
     # http://docs.celeryproject.org/en/latest/userguide/configuration.html
@@ -174,7 +176,7 @@ class BaseConfiguration(Configuration):
         SERVICE_AUTH_SECRET = os.environ.get("SERVICE_AUTH_SECRET")
 
         REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = (
-           'trood.contrib.django.auth.authentication.TroodTokenAuthentication',
+            'trood.contrib.django.auth.authentication.TroodTokenAuthentication',
         )
 
         REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = (
@@ -184,7 +186,6 @@ class BaseConfiguration(Configuration):
     elif AUTH_TYPE == 'NONE':
         REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = ()
         REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] = ()
-
 
     CUSTODIAN_URL = os.environ.get(
         'CUSTODIAN_URL', 'http://custodian.trood:8000/custodian/'
