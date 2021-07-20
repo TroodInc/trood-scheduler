@@ -25,4 +25,4 @@ dj_database_url
 regex
 google-cloud-iam
 
-git+https://07de0218088728b42ee60f155c71990f1dc6a717:x-oauth-basic@github.com/Q-CIS-DEV/trood-sdk.git#egg=trood
+trood==1.0.0
