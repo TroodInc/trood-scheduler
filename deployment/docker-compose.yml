@@ -12,8 +12,6 @@ services:
       ENABLE_RAVEN: "False"
     ports:
       - "8000"
-    networks:
-      - test-network
 
   scheduler_postgres:
     image: postgres:9.5
@@ -29,10 +27,3 @@ services:
       POSTGRES_DB: scheduler
       POSTGRES_USER: scheduler
       POSTGRES_PASSWORD: scheduler
-
-    networks:
-      - test-network
-
-networks:
-  test-network:
-    driver: bridge
