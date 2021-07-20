@@ -25,4 +25,7 @@ dj_database_url
 regex
 google-cloud-iam
 
+autoapi==2.0.1
+Sphinx==4.1.1
+sphinxcontrib-openapi==0.7.0
 trood==1.0.0
