@@ -16,6 +16,7 @@ COPY ./tasks $APPDIR/tasks
 COPY ./manage.py $APPDIR/manage.py
 COPY ./circus.ini $APPDIR/circus.ini
 COPY ./pytest.ini $APPDIR/pytest.ini
+COPY ./docs/_static/swagger.yml $APPDIR/static/
 COPY ./requirements.txt $APPDIR/requirements.txt
 
 RUN pip install --upgrade -r $APPDIR/requirements.txt

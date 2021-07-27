@@ -11,3 +11,4 @@ Contents
 
 .. toctree::
     get-started
+    rest-api
